@@ -21,6 +21,8 @@
   "dependencies": {
     "@dvgis/dc-sdk": "^2.2.0",
     "@dvgis/dc-ui": "^1.0.0-Beta",
+    "@jiaminghi/data-view": "^2.10.0",
+    "animate.css": "^3.5.1",
     "axios": "^0.21.1",
     "core-js": "^3.6.4",
     "echarts": "^5.1.2",

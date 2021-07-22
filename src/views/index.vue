@@ -6,18 +6,48 @@
       <div class="btn start" @click="start">开始</div>
       <div class="btn pause" @click="pause">结束</div>
     </div>
-    <div class="left__box">
-      <div class="echart__main" id="echart__main"></div>
-      <div class="echart__main2" id="echart__main2"></div>
-      <div class="echart__main3" id="echart__main3"></div>
-    </div>
+    <transition
+      name="custom-classes-transition"
+      enter-active-class="animated bounceInLeft"
+      leave-active-class="animated bounceOutLeft"
+    >
+      <div class="left__box" v-show="showLeft === '0'">
+        <dv-border-box-12 class="box">
+          <div class="echart__main" id="echart__main"></div>
+          <div class="echart__main2" id="echart__main2"></div>
+          <div class="echart__main3" id="echart__main3"></div>
+        </dv-border-box-12>
+      </div>
+    </transition>
+    <transition
+      name="custom-classes-transition"
+      enter-active-class="animated bounceInLeft"
+    >
+      <div class="left__box2" v-show="showLeft === '1'">
+        <div class="left__box__top">
+          <div class="title__center">
+            <div class="title">
+              浙江省新安江地震台
+            </div>
+            <div class="bit__close" @click="closeBox">关闭</div>
+          </div>
+          <div class="text__num">33050202</div>
+        </div>
+        <div class="left__box__center"></div>
+        <div class="left__box__bottom"></div>
+      </div>
+    </transition>
+
     <div class="right__box">
+      <dv-border-box-12 class="box1"></dv-border-box-12>
       <div class="platform__list">
-        <div class="platform"><el-tree
+        <div class="platform">
+          <el-tree
             :data="data"
             @node-click="handleNodeClick"
             :default-expand-all="true"
-          ></el-tree></div>
+          ></el-tree>
+        </div>
       </div>
     </div>
   </div>
@@ -48,7 +78,7 @@ export default {
   data() {
     return {
       textHeight: 0,
-       data: [
+      data: [
         {
           label: '浙江省',
           children: [
@@ -62,13 +92,14 @@ export default {
             }
           ]
         }
-      ]
+      ],
+      showLeft: '0'
     }
   },
   methods: {
     handleNodeClick(data) {
       console.log(data)
-       this.flyToPlatform1()
+      this.flyToPlatform1()
     },
     initViewer() {
       let viewer = undefined
@@ -240,7 +271,20 @@ export default {
         },
         xAxis: {
           type: 'category',
-          data: ['2020-6', '2020-7', '2020-8', '2020-9', '2020-10', '2020-11', '2020-12','2020-8', '2020-9', '2020-10', '2020-11', '2020-12']
+          data: [
+            '2020-6',
+            '2020-7',
+            '2020-8',
+            '2020-9',
+            '2020-10',
+            '2020-11',
+            '2020-12',
+            '2020-8',
+            '2020-9',
+            '2020-10',
+            '2020-11',
+            '2020-12'
+          ]
         },
         yAxis: {
           type: 'value'
@@ -311,7 +355,8 @@ export default {
       console.log('zwzzzwwz', viewer.cameraPosition)
     },
     flyToPlatform1() {
-      viewer.flyToPosition(
+      this.showLeft = '1'
+      /* viewer.flyToPosition(
         new DC.Position(
           119.26899269438597,
           29.482688438764715,
@@ -319,7 +364,10 @@ export default {
           346.7577402515688,
           -31.377540554358188
         ) // 经纬度，视高，0，视角
-      )
+      ) */
+    },
+    closeBox() {
+      this.showLeft = '0'
     },
     goTOMoudle() {
       this.$router.push('/moudle')
@@ -338,6 +386,7 @@ export default {
 .viewer-container {
   width: 100%;
   height: 100%;
+  font-size: 16px;
   overflow: hidden;
 }
 .home {
@@ -385,28 +434,63 @@ export default {
   top: 80px;
   left: 80px;
   z-index: 999;
-  padding: 10px;
-  border: #007acc 1px solid;
-  background-color: rgb(0, 0, 0, 0.6);
   color: #fff;
+  .box {
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    padding: 10px;
+    background-color: rgb(0, 0, 0, 0.6);
+    border-radius: 10px;
+    overflow: hidden;
+  }
   .echart__main {
     width: 350px;
     height: 25vh;
-    
     border-bottom: #ccc 1px solid;
     margin-bottom: 10px;
   }
   .echart__main2 {
     width: 350px;
     height: 25vh;
-    
     border-bottom: #ccc 1px solid;
     margin-bottom: 10px;
   }
   .echart__main3 {
     width: 350px;
     height: 25vh;
-    
+  }
+}
+.left__box2 {
+  position: fixed;
+  top: 80px;
+  left: 80px;
+  z-index: 999;
+  border-radius: 10px;
+  overflow: hidden;
+  color: #fff;
+  .left__box__top {
+    width: 350px;
+    height: 25vh;
+    padding: 10px;
+    background-color: #a55245;
+    .title__center {
+      display: flex;
+      justify-content: space-between;
+      align-content: center;
+      .bit__close {
+        width: 50px;
+        height: 30px;
+        border: #fff 1px solid;
+        border-radius: 5px;
+        text-align: center;
+        line-height: 30px;
+        cursor: pointer;
+      }
+    }
+    .text__num {
+      color: #c99c69;
+    }
   }
 }
 .right__box {
@@ -414,15 +498,20 @@ export default {
   top: 20px;
   right: 70px;
   z-index: 999;
-  padding: 10px;
-  border: #007acc 1px solid;
-  background-color: rgb(0, 0, 0, 0.6);
   color: #fff;
+  .box1 {
+    
+    position: absolute;
+    background-color: rgb(0, 0, 0, 0.6);
+    border-radius: 10px;
+  }
   .platform__list {
-    width: 350px;
+    padding: 10px;
+    box-sizing: border-box;
+    width: 37.353255rem /* 350/9.37 */;
     .platform {
-      width: 350px;
-      height: 80vh;
+      width: 100%;
+      height: 80rem;
       .el-tree {
         background-color: rgba(0, 0, 0, 0);
       }

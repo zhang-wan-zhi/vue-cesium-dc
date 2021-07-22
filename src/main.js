@@ -5,12 +5,26 @@
 
 import Vue from 'vue'
 import axios from 'axios'
-import { DcLoader, HttpLoader, UiLoader } from './loader';
+import { DcLoader, HttpLoader, UiLoader } from './loader'
+import animated from 'animate.css' // npm install animate.css --save安装，在引入
+import dataV from '@jiaminghi/data-view';
 (async() => {
     const hub = new Vue()
     Vue.config.productionTip = false
     global.Vue = Vue
     Vue.prototype.$hub = hub
+    Vue.use(animated)
+    Vue.use(dataV)
+
+    fnResize()
+    window.onresize = function() {
+        fnResize()
+    }
+
+    function fnResize() {
+        document.documentElement.style.fontSize = window.innerHeight / 100 + 'px'
+    }
+    console.log('window.innerHeight', window.innerHeight)
 
     await axios.get('config/config.json').then(res => {
         global.Config = res.data
